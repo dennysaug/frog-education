@@ -19,6 +19,7 @@ class RolesTableSeeder extends Seeder
         gen_route('Role Group');    // id 3
         gen_route('Area');          // id 4
         gen_route('Category');      // id 5
+//        gen_route('Quizz');
 
     }
 }

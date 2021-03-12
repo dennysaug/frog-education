@@ -189,9 +189,9 @@
                 </a>
                 <ul class="nav nav-treeview">
                     <li class="nav-item">
-                        <a href="{{ route('sysadmin.category.index') }}" class="nav-link">
+                        <a href="{{ route('sysadmin.quizz.index') }}" class="nav-link">
                             <i class="far fa-circle nav-icon"></i>
-                            <p>Category</p>
+                            <p>Start</p>
                         </a>
                     </li>
                 </ul>

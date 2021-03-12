@@ -190,4 +190,35 @@ Route::group(['prefix' => 'sysadmin', 'middleware' => ['auth','permission']], fu
 
     });
 
+
+    Route::group(['prefix' => 'quizz'], function() {
+
+        Route::get('/', [
+            'as' => 'sysadmin.quizz.index',
+            'uses' => 'Sysadmin\QuizzController@index'
+        ]);
+
+        Route::get('new', [
+            'as' => 'sysadmin.quizz.new',
+            'uses' => 'Sysadmin\QuizzController@new'
+        ]);
+
+        Route::get('questions/{quizz}', [
+            'as' => 'sysadmin.quizz.questions',
+            'uses' => 'Sysadmin\QuizzController@questions'
+        ]);
+
+        Route::post('store/{quizz?}', [
+            'as' => 'sysadmin.quizz.store',
+            'uses' => 'Sysadmin\QuizzController@store'
+        ]);
+
+        Route::post('question-store/{quizz?}', [
+            'as' => 'sysadmin.quizz.question-store',
+            'uses' => 'Sysadmin\QuizzController@questionsStore'
+        ]);
+
+    });
+
+
 });
