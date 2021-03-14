@@ -22,20 +22,20 @@
                 <!-- form start -->
                 {!! Form::model(isset($quizz)?$quizz:null, ['route' => ['sysadmin.quizz.question-store',isset($quizz)?$quizz:null]]) !!}
                 @if(isset($quizz) && $quizz->quizzQuestions->count())
-                    @foreach($quizz->quizzQuestions as $questao)
+                    @foreach($quizz->quizzQuestions as $question)
                         <div class="row">
                             <div class="col-md-12">
                                 <div class="card card-primary card-outline">
                                     <div class="card-header">
                                         <h3 class="card-title">
-                                            {{ $questao->title }}
+                                            {{ $question->title }}
                                         </h3>
                                     </div>
                                     <div class="card-body">
-                                        @foreach($questao->alternatives as $alternative)
+                                        @foreach($question->alternatives as $alternative)
                                             <div class="form-group">
                                                 <div class="custom-control custom-switch">
-                                                    {!! Form::checkbox('alternative['.$alternative->id.']', $alternative->id, null, ['class' => 'custom-control-input', 'id' => 'customSwitch' . $alternative->id]) !!}
+                                                    {!! Form::checkbox('alternative['.$question->id.']', $alternative->id, null, ['class' => 'custom-control-input', 'id' => 'customSwitch' . $alternative->id]) !!}
                                                     {!! Form::label('customSwitch'.$alternative->id, $alternative->title, ['class' => 'custom-control-label']) !!}
                                                 </div>
                                             </div>

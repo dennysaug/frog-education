@@ -20,7 +20,7 @@
                 @foreach($list as $data)
                   <tr>
                     <td>{{ $data->name }}</td>
-                    <td>0</td>
+                    <td>{{ $data->role_groups->count() }}</td>
                     <td>
                     @can('permission', 'sysadmin.role_group.edit')
                         <a class="btn btn-primary btn-sm" href="{{ route('sysadmin.role_group.edit', $data) }}" title="Edit">

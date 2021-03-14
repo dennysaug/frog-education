@@ -44,27 +44,30 @@ class QuizzController extends Controller
 
     public function questionsStore(Request $request,Quizz $quizz)
     {
-        $input = $request->except('_token');
+        if($quizz->user_id == Auth::user()->id) {
+            $input = $request->except('_token');
 
-//        dd($input['alternative']);
+            try {
 
-        try {
+                if(isset($input['alternative'])) {
+                    foreach ($input['alternative'] as $question_id => $alternative_id) {
 
-            if(isset($quizz->id)) {
-                $quizz->update($input);
-            } else {
-                $input['user_id'] = Auth::user()->id;
+                        $quizz->quizzQuestions()->where('quizz_questions.question_id', $question_id)->update([
+                            'alternative_id' => $alternative_id
+                        ]);
+                    }
+                }
 
-                $quizz = Quizz::create($input);
-                $questions_id = Question::inRandomOrder()->limit($quizz->quantity_question)->get()->pluck('id')->toArray();
-                $quizz->quizzQuestions()->sync($questions_id);
+                return redirect()->route('sysadmin.quizz.result', $quizz)->with('status',true)->with('msg', env('MSG_SUCCESS'));
+
+            } catch (\Exception $e) {
+                return redirect()->route('sysadmin.quizz.index')->with('status', false)->with('msg', $e->getMessage());
             }
 
-            return redirect()->route('sysadmin.quizz.question')->with('status',true)->with('msg', env('MSG_SUCCESS'));
-
-        } catch (\Exception $e) {
+        } else {
             return redirect()->route('sysadmin.quizz.index')->with('status', false)->with('msg', $e->getMessage());
         }
+
 
     }
 
@@ -84,11 +87,32 @@ class QuizzController extends Controller
                 $quizz->quizzQuestions()->sync($questions_id);
             }
 
-            return redirect()->route('sysadmin.quizz.question')->with('status',true)->with('msg', env('MSG_SUCCESS'));
+            return redirect()->route('sysadmin.quizz.questions', $quizz)->with('status',true)->with('msg', env('MSG_SUCCESS'));
 
         } catch (\Exception $e) {
             return redirect()->route('sysadmin.quizz.index')->with('status', false)->with('msg', $e->getMessage());
         }
+
+
+    }
+
+    public function result(Quizz $quizz)
+    {
+        if($quizz->user_id == Auth::user()->id) {
+            $correct_id = $quizz->correct();
+            $answers = $quizz->quizzAlternative->pluck('correct','id');
+            $total = 0;
+            if(isset($answers) && $answers->count()) {
+                foreach($answers as $answer) {
+                    if($answer == 'Y') {
+                        $total++;
+                    }
+                }
+            }
+
+            return view('sysadmin.quizz.result', compact('quizz','correct_id', 'answers', 'total'));
+        }
+
 
 
     }

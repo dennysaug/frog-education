@@ -218,6 +218,11 @@ Route::group(['prefix' => 'sysadmin', 'middleware' => ['auth','permission']], fu
             'uses' => 'Sysadmin\QuizzController@questionsStore'
         ]);
 
+        Route::get('result/{quizz}', [
+            'as' => 'sysadmin.quizz.result',
+            'uses' => 'Sysadmin\QuizzController@result'
+        ]);
+
     });
 
 

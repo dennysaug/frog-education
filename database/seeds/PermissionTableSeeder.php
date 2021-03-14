@@ -2,6 +2,7 @@
 
 use App\Area;
 use App\Role;
+use App\UserGroup;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Auth;
 
@@ -83,6 +84,14 @@ class PermissionTableSeeder extends Seeder
                 'method' => 'post',
                 'protected' => 'Y'
             ],
+            [
+                'area_id' => $quizz->id, //Quizz - Question Store
+                'name' => 'Questions Result',
+                'route' => 'syadmin/quizz/result/{quizz}',
+                'alias' => "sysadmin.quizz.result",
+                'method' => 'get',
+                'protected' => 'Y'
+            ],
 
 
         ];
@@ -93,7 +102,9 @@ class PermissionTableSeeder extends Seeder
         }
         $user = Auth::loginUsingId(1);
 
-        $user->permissions()->sync($rolesId);
+        $userGroup = UserGroup::find($user->user_group_id);
+
+        $userGroup->role_groups()->syncWithoutDetaching($rolesId);
 
     }
 }
